@@ -49,4 +49,4 @@ test-suite wavetoy-test
 
 source-repository head
   type:     git
-  location: https://github.com/eschnett/wavetoy
+  location: https://github.com/eschnett/wavetoy.hs
