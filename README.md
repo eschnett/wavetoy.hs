@@ -1,1 +1,1 @@
-# WaveToy implemented in Haskell
+# WaveToy in Haskell
