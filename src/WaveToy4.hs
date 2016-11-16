@@ -23,7 +23,7 @@ data Cell a = Cell { x :: a,
                      u :: a,
                      rho :: a,
                      v :: a }
-              deriving (Foldable, Functor, Read, Show)
+              deriving (Eq, Foldable, Functor, Read, Show)
 
 instance Zip Cell where
     zip s s' = Cell (x s, x s') (u s, u s') (rho s, rho s') (v s, v s')
