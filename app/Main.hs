@@ -41,14 +41,14 @@ output ninfo nfile dx (State i t g) = do
     putStrLn $ "energy: " ++ show en
   when (nfile > 0 && mod i nfile == 0) $ do
     (if i == 0 then writeFile else appendFile) "wavetoy.out" (showGrid g)
-    where showCell (Cell x u rho v) =
-              show x ++ "\t" ++ show u ++ "\t" ++ show rho ++ "\t" ++ show v
+    where showCell (Cell x u ρ v) =
+              show x ++ "\t" ++ show u ++ "\t" ++ show ρ ++ "\t" ++ show v
           showLine (s, e) =
               show i ++ "\t" ++ show t ++ "\t" ++
               showCell s ++ "\t" ++
               showCell e ++ "\n"
           showGrid g =
-              "# iter time   x u rho v   ex eu erho ev\n" ++
+              "# iter time   x u ρ v   ex eu eρ ev\n" ++
               foldMap showLine (zip g (errorGrid t g)) ++
               "\n"
 

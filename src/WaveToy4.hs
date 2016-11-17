@@ -19,14 +19,11 @@ import Data.VectorSpace
 
 -- State vector
 
-data Cell a = Cell { x :: a,
-                     u :: a,
-                     rho :: a,
-                     v :: a }
+data Cell a = Cell { x, u, ρ, v :: a }
               deriving (Eq, Foldable, Functor, Read, Show)
 
 instance Zip Cell where
-    zip s s' = Cell (x s, x s') (u s, u s') (rho s, rho s') (v s, v s')
+    zip s s' = Cell (x s, x s') (u s, u s') (ρ s, ρ s') (v s, v s')
 
 instance (AdditiveGroup a, Num a) => AdditiveGroup (Cell a) where
     zeroV = Cell zeroV zeroV zeroV zeroV
@@ -38,21 +35,21 @@ instance (VectorSpace a, Num a) => VectorSpace (Cell a) where
     (*^) alpha = fmap (alpha *)
 
 standingWave :: Floating a => a -> a -> Cell a
-standingWave t x = Cell x u rho v
+standingWave t x = Cell x u ρ v
     where k = pi
-          amp = 1 / k
           omega = sqrt(k^2)
+          amp = 1 / k
           u = amp * sin(omega * t) * sin(k * x)
-          rho = amp * omega * cos(omega * t) * sin(k * x)
+          ρ = amp * omega * cos(omega * t) * sin(k * x)
           v = amp * k * sin(omega * t) * cos(k * x)
 
 planeWave :: Floating a => a -> a -> Cell a
-planeWave t x = Cell x u rho v
+planeWave t x = Cell x u ρ v
     where k = 2 * pi
           omega = sqrt(k^2)
           amp = 1 / (2 * pi)
           u = amp * sin(omega * t - k * x)
-          rho = amp * omega * cos(omega * t - k * x)
+          ρ = amp * omega * cos(omega * t - k * x)
           v = - amp * k * cos(omega * t - k * x)
 
 analyticCell :: Floating a => a -> a -> Cell a
@@ -62,16 +59,16 @@ initialCell :: Floating a => a -> a -> Cell a
 initialCell = analyticCell
 
 energyCell :: Fractional a => Cell a -> a
-energyCell s = 1/2 * ((rho s)^2 + (v s)^2)
+energyCell s = 1/2 * ((ρ s)^2 + (v s)^2)
 
 bndCell :: Real a => Bool -> Cell a -> Cell a -> Cell a
-bndCell f s b = Cell x' (-u s) (-rho s) (v s)
+bndCell f s b = Cell x' (-u s) (-ρ s) (v s)
     where x' = 2 * x s - x b
--- bndCell f s b = Cell x' (u b) (rho b) (v b)
+-- bndCell f s b = Cell x' (u b) (ρ b) (v b)
 --     where x' = x b + if not f then -1 else 1
 
 rhsCell :: Fractional a => (Cell a, Cell a) -> Cell a -> Cell a
-rhsCell (bm, bp) s = Cell 0 (rho s) (ddx v) (ddx rho)
+rhsCell (bm, bp) s = Cell 0 (ρ s) (ddx v) (ddx ρ)
     where ddx var = (var bp - var bm) / (x bp - x bm)
 
 errorCell :: (AdditiveGroup a, Floating a) => a -> Cell a -> Cell a

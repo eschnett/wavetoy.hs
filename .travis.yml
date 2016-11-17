@@ -11,49 +11,12 @@ addons:
 # ghc: 7.10
 
 before_install:
-  - export PATH=/opt/cabal/1.22/bin:/opt/ghc/bin:$PATH
+  - export PATH=/opt/cabal/1.22/bin:/opt/ghc/bin:$PATH && which cabal && which ghc
 
 install:
   - cabal install --only-dependencies --enable-tests
-  # - ghc Setup.hs
-  # - ./Setup configure
-  # - ./Setup build
-  # - ./dist/build/cabal/cabal install --only-dependencies --enable-tests
 
 script:
   - cabal configure --enable-tests
   - cabal build
   - cabal test
-  # - ./dist/build/cabal/cabal configure --enable-tests
-  # - ./dist/build/cabal/cabal build
-  # - ./dist/build/cabal/cabal test
-
-# sudo: false
-# 
-# # Cache the build
-# cache:
-#   directories:
-#   - $HOME/.stack-work
-# 
-# before_install:
-#   # Download and unpack the stack executable
-#   - mkdir -p ~/.local/bin
-#   - export PATH=$HOME/.local/bin:$PATH
-#   - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-# 
-# before_install:
-#   - export PATH=/opt/ghc/7.10.2/bin:$PATH
-# 
-# addons:
-#   apt:
-#     sources:
-#       - hvr-ghc
-#     packages:
-#       - ghc-7.10.2
-# 
-# script:
-#   - stack --no-terminal --skip-ghc-check test
-# 
-# install:
-#   - ./travis_long stack --no-terminal --skip-ghc-check setup
-#   - ./travis_long stack --no-terminal --skip-ghc-check test --only-snapshot
